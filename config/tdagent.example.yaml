@@ -1,0 +1,17 @@
+# Copy to ./tdagent.yaml (gitignored) and edit. Contains no credentials.
+content_repo: ../sentinel-detection-as-code
+
+bedrock:
+  region: us-east-1
+  model_id: ""        # set per environment; chosen by evaluation, never hard-coded
+  guardrail_id: ""
+
+stores:
+  findings_table: ""
+  proposals_table: tdagent-proposals
+  runs_table: tdagent-runs
+  artefacts_bucket: ""
+
+budgets:
+  max_cost_per_run_usd: 5.0
+  max_candidates_per_scan: 10

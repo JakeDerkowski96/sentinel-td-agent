@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-td-agent/contracts/agent-config.v1.schema.json",
+  "title": "Agent configuration v1",
+  "description": "Schema for tdagent.yaml. Contains no credentials.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "content_repo": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bedrock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "region": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_id": {
+          "type": "string"
+        },
+        "guardrail_id": {
+          "type": "string"
+        }
+      }
+    },
+    "stores": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "findings_table": {
+          "type": "string"
+        },
+        "proposals_table": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runs_table": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artefacts_bucket": {
+          "type": "string"
+        }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_cost_per_run_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_candidates_per_scan": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}
