@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-td-agent/contracts/report-audit.v1.schema.json",
+  "title": "Audit report v1",
+  "description": "Output of `tdagent report audit --format json`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reportVersion",
+    "kind",
+    "generatedAt",
+    "contentRepoRef",
+    "parameters",
+    "summary",
+    "validation",
+    "ownership",
+    "maturity",
+    "exceptions",
+    "overrides",
+    "agentControls",
+    "unusedContent"
+  ],
+  "properties": {
+    "reportVersion": {
+      "const": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "contentRepoRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "kind": {
+      "const": "audit"
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "rules",
+        "content",
+        "errors",
+        "warnings",
+        "byLifecycle"
+      ],
+      "properties": {
+        "rules": {
+          "type": "integer"
+        },
+        "content": {
+          "type": "integer"
+        },
+        "errors": {
+          "type": "integer"
+        },
+        "warnings": {
+          "type": "integer"
+        },
+        "byLifecycle": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "severity",
+          "code",
+          "path",
+          "message"
+        ],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "minLength": 1
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "required": [
+        "missingOwner",
+        "notReviewed"
+      ],
+      "properties": {
+        "missingOwner": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "notReviewed": {
+          "type": "object",
+          "required": [
+            "thresholdDays",
+            "rules"
+          ],
+          "properties": {
+            "thresholdDays": {
+              "type": "integer"
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "maturity": {
+      "type": "object",
+      "required": [
+        "noTests",
+        "noPlaybook",
+        "experimentalInProduction"
+      ],
+      "properties": {
+        "noTests": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "noPlaybook": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "experimentalInProduction": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "exceptions": {
+      "type": "object",
+      "required": [
+        "expired",
+        "expiringSoon"
+      ],
+      "properties": {
+        "expired": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "expiringSoon": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "overrides": {
+      "type": "object",
+      "required": [
+        "expired",
+        "expiringSoon"
+      ],
+      "properties": {
+        "expired": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "expiringSoon": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "agentControls": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer"
+      }
+    },
+    "unusedContent": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

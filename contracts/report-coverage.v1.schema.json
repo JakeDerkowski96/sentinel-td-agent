@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-td-agent/contracts/report-coverage.v1.schema.json",
+  "title": "Coverage report v1",
+  "description": "Output of `tdagent report coverage --format json`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reportVersion",
+    "kind",
+    "generatedAt",
+    "contentRepoRef",
+    "parameters",
+    "summary",
+    "techniques",
+    "tactics",
+    "dataSources",
+    "weakCoverage",
+    "uncoveredTechniques",
+    "conversionCandidates",
+    "limitations"
+  ],
+  "properties": {
+    "reportVersion": {
+      "const": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "contentRepoRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "kind": {
+      "const": "coverage"
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "rules",
+        "byLifecycle",
+        "bySeverity",
+        "byTier"
+      ],
+      "properties": {
+        "rules": {
+          "type": "integer"
+        },
+        "byLifecycle": {
+          "type": "object"
+        },
+        "bySeverity": {
+          "type": "object"
+        },
+        "byTier": {
+          "type": "object"
+        }
+      }
+    },
+    "techniques": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "lifecycle",
+            "enabled"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lifecycle": {
+              "type": "string",
+              "minLength": 1
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "tactics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "lifecycle",
+            "enabled"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lifecycle": {
+              "type": "string",
+              "minLength": 1
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "dataSources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "weakCoverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "technique",
+          "reason",
+          "rules"
+        ],
+        "properties": {
+          "technique": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "uncoveredTechniques": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "conversionCandidates": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

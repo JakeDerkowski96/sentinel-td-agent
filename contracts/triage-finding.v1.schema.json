@@ -1,0 +1,406 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-td-agent/contracts/triage-finding.v1.schema.json",
+  "title": "TriageFinding v1 (target contract)",
+  "description": "PROPOSED shape of a triage result as the Threat Detection agent needs it. The existing triage agent's stored shape must be reconciled with this (review-log U4); the TD agent reads through an adapter.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "finding_id",
+    "incident",
+    "assessment",
+    "evidence",
+    "learning_eligibility"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "finding_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tenant": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "incident": {
+      "type": "object",
+      "required": [
+        "id",
+        "detection_rule_ids",
+        "created_time"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detection_rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "severity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "required": [
+        "verdict",
+        "assessment_confidence",
+        "evidence_completeness"
+      ],
+      "properties": {
+        "verdict": {
+          "enum": [
+            "benign",
+            "suspicious",
+            "malicious",
+            "inconclusive"
+          ]
+        },
+        "suggested_classification": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assessment_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence_completeness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "statement",
+          "evidence_ids"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "inferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "statement",
+          "evidence_ids"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "kb_guidance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "statement",
+          "evidence_ids"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "threat_intelligence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "statement",
+          "evidence_ids"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "identifier_hash"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "identifier_hash": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "provenance",
+          "supports"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "provenance": {
+            "type": "object",
+            "required": [
+              "source",
+              "retrieved_at"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tool": {
+                "type": "string",
+                "minLength": 1
+              },
+              "query_hash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "retrieved_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "raw_reference": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "normalized_observation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reliability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "supports": {
+            "enum": [
+              "supports",
+              "contradicts",
+              "neutral"
+            ]
+          },
+          "freshness": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "hypotheses": {
+      "type": "object",
+      "properties": {
+        "considered": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "supported": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "rejected": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "false_positive_analysis": {
+      "type": "object",
+      "properties": {
+        "is_likely_fp": {
+          "type": "boolean"
+        },
+        "root_cause": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trigger_condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "distinguishing_features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "detection_observations": {
+      "type": "object",
+      "properties": {
+        "rule_effective": {
+          "type": "boolean"
+        },
+        "potential_tuning_opportunity": {
+          "type": "boolean"
+        },
+        "observed_noise_pattern": {
+          "type": "string",
+          "minLength": 1
+        },
+        "possible_missing_coverage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "suggested_research": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "missing_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source",
+          "reason",
+          "impact"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "impact": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "learning_eligibility": {
+      "type": "object",
+      "required": [
+        "analyst_validated",
+        "evidence_complete",
+        "eligible_for_detection_learning"
+      ],
+      "properties": {
+        "analyst_validated": {
+          "type": "boolean"
+        },
+        "evidence_complete": {
+          "type": "boolean"
+        },
+        "eligible_for_detection_learning": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

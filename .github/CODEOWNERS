@@ -1,0 +1,8 @@
+# Default owner for everything. Wires up automatic review assignment for when a
+# second maintainer exists.
+*                       @JakeDerkowski96
+
+# Changes here alter what the agent is allowed to do or who it runs as.
+/contracts/             @JakeDerkowski96
+/docs/plan/08-security-and-permissions.md  @JakeDerkowski96
+/.github/               @JakeDerkowski96

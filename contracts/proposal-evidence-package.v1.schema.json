@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-td-agent/contracts/proposal-evidence-package.v1.schema.json",
+  "title": "Proposal evidence package v1",
+  "description": "Everything a reviewer needs to judge an agent proposal. The PR body is rendered from this document.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "proposal",
+    "trigger",
+    "evidence",
+    "analysis",
+    "change",
+    "validation",
+    "critique",
+    "risk",
+    "policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "proposal": {
+      "type": "object",
+      "required": [
+        "id",
+        "mode",
+        "rule_ids",
+        "origin",
+        "model_id",
+        "run_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "enum": [
+            "TUNE",
+            "CREATE",
+            "RESEARCH",
+            "VALIDATE",
+            "COVERAGE_ASSESSMENT",
+            "DEPRECATE"
+          ]
+        },
+        "rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "origin": {
+          "const": "agent"
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prompt_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "required": [
+        "kind",
+        "reference"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "signal",
+            "jira",
+            "coverage_gap",
+            "new_log_source",
+            "threat_intel",
+            "hunt_conversion",
+            "manual"
+          ]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signal_type": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "findings",
+        "telemetry"
+      ],
+      "properties": {
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "finding_id",
+              "eligible"
+            ],
+            "properties": {
+              "finding_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "eligible": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "telemetry": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "summary",
+              "provenance"
+            ],
+            "properties": {
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              },
+              "provenance": {
+                "type": "object",
+                "required": [
+                  "source",
+                  "retrieved_at"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "tool": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "query_hash": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "retrieved_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "raw_reference": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "required": [
+        "root_cause",
+        "facts",
+        "inferences"
+      ],
+      "properties": {
+        "root_cause": {
+          "type": "string",
+          "minLength": 1
+        },
+        "facts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "statement",
+              "evidence_ids"
+            ],
+            "properties": {
+              "statement": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "inferences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "statement",
+              "evidence_ids"
+            ],
+            "properties": {
+              "statement": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "required": [
+        "summary",
+        "paths"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "tuning_history_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "layers"
+      ],
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "layer",
+              "result"
+            ],
+            "properties": {
+              "layer": {
+                "enum": [
+                  "static",
+                  "replay",
+                  "synthetic",
+                  "atomic",
+                  "sandbox"
+                ]
+              },
+              "result": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "skipped",
+                  "warning"
+                ]
+              },
+              "detail": {
+                "type": "string",
+                "minLength": 1
+              },
+              "known_true_positives_retained": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "critique": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "objection",
+          "response"
+        ],
+        "properties": {
+          "objection": {
+            "type": "string",
+            "minLength": 1
+          },
+          "response": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resolved": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "required": [
+        "coverage_impact",
+        "blind_spots",
+        "rollback"
+      ],
+      "properties": {
+        "coverage_impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blind_spots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "rollback": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "checks_passed",
+        "labels_required"
+      ],
+      "properties": {
+        "checks_passed": {
+          "type": "boolean"
+        },
+        "labels_required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}
