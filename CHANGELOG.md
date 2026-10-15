@@ -6,6 +6,8 @@ the project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-15
+
 ### Added
 - Full plan for the Threat Detection agent in `docs/plan/` (vision, architecture, agent design,
   CLI, reports, storage, triage integration, validation and promotion, security, evaluation,
@@ -21,4 +23,5 @@ the project follows [Semantic Versioning](https://semver.org/).
 - `scripts/check_links.py` documentation link checker.
 - CI workflow with a single gate job; repository settings script.
 
-[Unreleased]: https://github.com/JakeDerkowski96/sentinel-td-agent/commits/main
+[Unreleased]: https://github.com/JakeDerkowski96/sentinel-td-agent/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/JakeDerkowski96/sentinel-td-agent/releases/tag/v0.1.0
