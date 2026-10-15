@@ -21,6 +21,7 @@ could have done instead, and what I chose. Written for your review.
 | U14 | Customer data and Bedrock position |
 | U22 | Central versus per-tenant inventory workspace |
 | U16 | Test the example KQL before trusting it |
+| U26 | Update or delete the earlier public gist so it does not contradict the plan |
 
 ---
 
@@ -263,7 +264,7 @@ could have done instead, and what I chose. Written for your review.
 
 **Uncertainty.** This is the most important caveat. Nothing was run against Sentinel, Azure, AWS, Bedrock or GitHub Apps.
 
-**Choice and why.** **Verified (run here):** the content repo validator, schemas, example content and its 18 tests; lint, type checks and CI on both repos; contract schemas are valid JSON Schema; the agent CLI's implemented commands against the vendored sample. **Not verified:** that the example KQL runs or produces the intended results (including the regexes and the `_GetWatchlist`/function usage); table and column names; Sentinel's ARM mapping of `rule.yaml`; that entity-mapping identifiers are accepted; DynamoDB design against the real table; telemetry columns; Atomic Red Team test selection (left `pending`); Bedrock behaviour; IAM and federation details.
+**Choice and why.** **Verified (run here):** the content repo validator, schemas, example content and its 18 tests; the agent CLI's 27 tests (offline commands, report conformance to the contracts, config precedence, stub exit codes); lint, strict type checks and CI on both repos; contract schemas are valid JSON Schema. **Not verified:** that the example KQL runs or produces the intended results (including the regexes and the `_GetWatchlist`/function usage); table and column names; Sentinel's ARM mapping of `rule.yaml`; that entity-mapping identifiers are accepted; DynamoDB design against the real table; telemetry columns; Atomic Red Team test selection (left `pending`); Bedrock behaviour; IAM and federation details.
 
 **Follow-up for you.** Example rules and everything in plan/05, plan/08 and plan/10 should be treated as design, not tested fact. Run the example KQL in a sandbox before trusting it.
 
@@ -388,5 +389,46 @@ could have done instead, and what I chose. Written for your review.
 **Choice and why.** Added `.gitattributes` (`eol=lf`) to both repos and made the test fixture copy files only. No behaviour impact.
 
 **Follow-up for you.** Consider keeping git repos out of OneDrive, which can also corrupt `.git` directories.
+
+---
+
+## U25: Small follow-ups I noticed but did not chase
+
+**Uncertainty.** Minor items that did not block the work but you may want to schedule.
+
+**Items.**
+
+1. `dac-validate` ships without a `py.typed` marker, so this repo's mypy config treats it as untyped (`ignore_missing_imports`). Fix: add the marker in the content repo and bump the pin.
+2. `contentRepoRef` in reports is `unknown` unless the content root is itself a git top-level. This is deliberate (a vendored copy inside another repo would otherwise report the wrong commit) but means a checkout downloaded as a zip reports `unknown`.
+3. `report coverage` computes *weak coverage* against all live rules even when `--env` narrows the view, because "only covered by dev rules" is meaningless if dev is filtered out.
+4. The audit's "not reviewed" check uses `lastReviewed`, falling back to `created`. Nothing sets `lastReviewed` yet, so after 180 days every rule will appear unreviewed until someone does a review pass.
+5. `content show` prints JSON only (no human-formatted view).
+6. CodeQL was not enabled. Secret scanning, push protection, Dependabot alerts and Dependabot security updates were.
+7. Planned commands accept and ignore any flags so they can be called with their eventual arguments; this also means a typo in a planned command's flag is silently ignored until it is implemented.
+
+**Follow-up for you.** Pick which of these are worth doing before Phase 2.
+
+---
+
+## U26: Things created outside the two repositories
+
+**Uncertainty.** Work earlier in the same session left artefacts elsewhere, which could confuse a reviewer.
+
+**Items.**
+
+1. A **public gist** of the Bedrock hosting suggestions was published earlier. It predates the plan and the plan supersedes it where they differ (notably the storage recommendation: the gist suggested Aurora PostgreSQL; the plan chooses DynamoDB, see U3).
+2. The local **Notion export** copies (`Detection-Engineering-Control-Plane-Notion-Export`) were edited to add TD-agent material (pages 05, 07, 08). Notion itself was not changed (U19).
+3. The local `bak/` folder and the `detection-as-code` working folder were read, not modified. The working folder is not a git repo; its edits are not under version control.
+4. A row was added to the local portfolio `index.md` pointing at the gist.
+
+**Follow-up for you.** Consider deleting or updating the gist so it does not contradict the plan.
+
+---
+
+## U27: Repository settings that were applied
+
+**Items.** Both repositories are public with: squash-merge only (PR title and body as the commit message), branches deleted on merge, wiki and discussions off, `main` protected (pull request required, no approvals, required status check `gate` / `validate-gate`, admins not exempt, linear history, no force pushes or deletions, conversation resolution), secret scanning and push protection on, Dependabot alerts and security updates on, repository topics set. Applied by `scripts/apply_repo_settings.sh`, which supports `--dry-run`.
+
+**Follow-up for you.** With a second contributor, enable required reviews (see U18).
 
 ---
