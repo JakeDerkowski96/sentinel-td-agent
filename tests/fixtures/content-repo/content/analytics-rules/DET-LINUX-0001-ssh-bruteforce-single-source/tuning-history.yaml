@@ -1,0 +1,10 @@
+schemaVersion: 1
+id: DET-LINUX-0001
+entries:
+  - version: 1.0.0
+    date: "2026-10-15"
+    type: create
+    summary: Initial rule.
+    reason: Example rule shipped with the scaffold; demonstrates a parser dependency and a high-volume tuning candidate.
+    origin: human
+    outcome: merged

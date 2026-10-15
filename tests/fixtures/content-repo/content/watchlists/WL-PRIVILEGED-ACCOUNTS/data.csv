@@ -1,0 +1,4 @@
+UserPrincipalName,Role,Owner
+admin.alice@contoso.example,Global Administrator,identity-team
+admin.bob@contoso.example,Security Administrator,security-team
+svc.deploy@contoso.example,Contributor,platform-team

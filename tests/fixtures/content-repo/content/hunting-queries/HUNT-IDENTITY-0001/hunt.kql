@@ -1,0 +1,6 @@
+SigninLogs
+| where TimeGenerated > ago(1d)
+| where ResultType == "0"
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize Countries = make_set(Country), CountryCount = dcount(Country) by UserPrincipalName
+| where CountryCount >= 3

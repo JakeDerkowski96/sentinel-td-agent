@@ -1,0 +1,20 @@
+schemaVersion: 1
+id: FUNC-NORMALIZE-PROCESS-001
+type: function
+displayName: Normalised process events
+description: Lower-cases file and account names so process detections can compare values without case handling.
+owner: detection-engineering
+lifecycle: validated
+alias: ProcessEventsNormalized
+category: Detection helpers
+parameters: []
+queryFile: function.kql
+tables:
+  - DeviceProcessEvents
+deployment:
+  scope: capability
+  requirements:
+    tables:
+      - DeviceProcessEvents
+    connectors:
+      - Microsoft Defender XDR

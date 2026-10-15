@@ -1,0 +1,40 @@
+schemaVersion: 1
+id: DET-MDE-0001
+lifecycle: draft
+owner: detection-engineering
+confidenceTier: Experimental
+created: "2026-10-15"
+package: PKG-ENDPOINT-POWERSHELL
+dataSources:
+  tables:
+    - DeviceProcessEvents
+  connectors:
+    - Microsoft Defender XDR
+dependencies:
+  functions:
+    - FUNC-NORMALIZE-PROCESS-001
+deployment:
+  scope: capability
+  requirements:
+    tables:
+      - DeviceProcessEvents
+    connectors:
+      - Microsoft Defender XDR
+  productionCanary:
+    enabled: true
+    severity: Informational
+    duration: P7D
+quality:
+  expectedAlertVolume: medium
+  knownLimitations:
+    - Detects the command-line flag only; PowerShell started through other means (e.g. an embedded host) is not covered.
+  falsePositiveSources:
+    - Software deployment and management tools that legitimately pass encoded commands.
+  blindSpots:
+    - Encoded payloads delivered through a script file rather than the command line.
+agent:
+  tuning: allowed
+  origin: human
+documentation:
+  summary: Flags PowerShell launched with an encoded command that carries a long payload.
+  analystPlaybook: analyst-playbook.md

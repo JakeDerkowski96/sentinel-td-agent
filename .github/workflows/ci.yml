@@ -16,6 +16,34 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  lint:
+    name: Lint and type-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
   contracts:
     name: Contracts are valid JSON Schema
     runs-on: ubuntu-latest
@@ -54,7 +82,7 @@ jobs:
   gate:
     name: gate
     if: always()
-    needs: [contracts, docs, secrets]
+    needs: [lint, test, contracts, docs, secrets]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -67,6 +95,8 @@ jobs:
             echo
             echo "| Job | Result |"
             echo "|---|---|"
+            echo "| Lint and type-check | ${{ needs.lint.result }} |"
+            echo "| Unit tests | ${{ needs.test.result }} |"
             echo "| Contracts | ${{ needs.contracts.result }} |"
             echo "| Documentation links | ${{ needs.docs.result }} |"
             echo "| Secret scan | ${{ needs.secrets.result }} |"

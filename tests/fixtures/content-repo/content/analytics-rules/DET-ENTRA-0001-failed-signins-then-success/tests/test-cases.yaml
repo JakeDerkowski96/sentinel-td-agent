@@ -1,0 +1,18 @@
+schemaVersion: 1
+id: DET-ENTRA-0001
+cases:
+  - id: TC-001
+    name: Ten failures then a success fires
+    type: synthetic
+    fixture: fixtures/failures-then-success.csv
+    expect:
+      fires: true
+      entities: [Account, IP]
+      customDetails: [FailureCount, IsPrivileged]
+      incident: true
+  - id: TC-002
+    name: Three failures then a success does not fire
+    type: synthetic
+    fixture: fixtures/below-threshold.csv
+    expect:
+      fires: false

@@ -1,0 +1,13 @@
+// DET-LINUX-0001
+// Depends on PARSER-SYSLOG-SSHD-001 (SyslogSshdAuth).
+let AttemptThreshold = 20;
+SyslogSshdAuth()
+| where Outcome == "Failed" and isnotempty(SourceIP)
+| summarize
+    Attempts = count(),
+    DistinctUsers = dcount(TargetUser),
+    FirstSeen = min(TimeGenerated),
+    LastSeen = max(TimeGenerated)
+    by SourceIP, Computer
+| where Attempts >= AttemptThreshold
+| extend TimeGenerated = LastSeen

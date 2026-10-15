@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-detection-as-code/schemas/policy-tuning-thresholds.schema.json",
+  "title": "Tuning thresholds policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "signals",
+    "learning_eligibility",
+    "replay_requirements"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "signals": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "description"
+        ]
+      }
+    },
+    "learning_eligibility": {
+      "type": "object",
+      "required": [
+        "require_analyst_validated",
+        "min_evidence_completeness",
+        "min_assessment_confidence"
+      ],
+      "properties": {
+        "require_analyst_validated": {
+          "type": "boolean"
+        },
+        "min_evidence_completeness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "min_assessment_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "replay_requirements": {
+      "type": "object"
+    }
+  }
+}

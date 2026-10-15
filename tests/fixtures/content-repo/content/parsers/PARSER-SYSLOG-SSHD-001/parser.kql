@@ -1,0 +1,12 @@
+// Parser function: SyslogSshdAuth()
+// Why a parser: raw Syslog is free text. Parsing once, here, gives every SSH
+// detection the same field names and one place to fix regex edge cases.
+Syslog
+| where ProcessName == "sshd"
+| where SyslogMessage startswith "Failed password"
+    or SyslogMessage startswith "Accepted password"
+    or SyslogMessage startswith "Accepted publickey"
+| extend Outcome = iff(SyslogMessage startswith "Failed", "Failed", "Accepted")
+| extend TargetUser = extract(@"for (?:invalid user )?(\S+) from", 1, SyslogMessage)
+| extend SourceIP = extract(@"from (\d{1,3}(?:\.\d{1,3}){3})", 1, SyslogMessage)
+| project TimeGenerated, Computer, Outcome, TargetUser, SourceIP, SyslogMessage

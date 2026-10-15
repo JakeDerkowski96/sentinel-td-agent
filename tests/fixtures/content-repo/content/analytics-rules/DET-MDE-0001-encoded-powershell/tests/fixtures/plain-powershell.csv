@@ -1,0 +1,2 @@
+TimeGenerated,DeviceName,AccountName,AccountDomain,FileName,ProcessCommandLine,InitiatingProcessFileName
+2026-10-15T10:00:00Z,host-01,alex,contoso,powershell.exe,"powershell.exe -NoProfile -Command Get-Date",explorer.exe

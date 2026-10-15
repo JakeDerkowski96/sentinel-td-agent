@@ -1,0 +1,28 @@
+# Lifecycle states and allowed transitions. State is recorded in each rule's
+# metadata.yaml (not in the folder path) so history follows the rule.
+schemaVersion: 1
+
+states:
+  - draft
+  - validated
+  - sandbox-passed
+  - canary
+  - approved
+  - production
+  - retired
+
+transitions:
+  draft:          [validated, retired]
+  validated:      [draft, sandbox-passed, retired]
+  sandbox-passed: [validated, canary, retired]
+  canary:         [sandbox-passed, approved, retired]
+  approved:       [canary, production, retired]
+  production:     [canary, retired]
+  retired:        [draft]
+
+# Transitions the agent may NOT perform (humans only).
+human_only_transitions:
+  - from: approved
+    to: production
+  - from: production
+    to: retired

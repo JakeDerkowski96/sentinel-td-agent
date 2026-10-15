@@ -1,0 +1,39 @@
+schemaVersion: 1
+id: DET-LINUX-0001
+lifecycle: draft
+owner: detection-engineering
+confidenceTier: Experimental
+created: "2026-10-15"
+package: PKG-LINUX-SSH
+dataSources:
+  tables:
+    - Syslog
+  connectors:
+    - Syslog via Azure Monitor Agent
+dependencies:
+  parsers:
+    - PARSER-SYSLOG-SSHD-001
+deployment:
+  scope: capability
+  requirements:
+    tables:
+      - Syslog
+  productionCanary:
+    enabled: true
+    severity: Informational
+    duration: P7D
+quality:
+  expectedAlertVolume: high
+  knownLimitations:
+    - Internet-facing SSH is scanned constantly, so volume is dominated by background noise.
+  falsePositiveSources:
+    - Authorised vulnerability scanners and automation with stale credentials.
+  blindSpots:
+    - Slow attacks that stay under the per-window attempt threshold.
+agent:
+  tuning: allowed
+  origin: human
+  notes: Expected to need volume tuning; good first candidate for agent-proposed changes.
+documentation:
+  summary: Flags a source address with many failed SSH password attempts against one host.
+  analystPlaybook: analyst-playbook.md

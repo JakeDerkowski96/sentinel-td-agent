@@ -1,0 +1,14 @@
+// Workspace function body: ProcessEventsNormalized()
+// Why: every process detection otherwise repeats tolower() calls, and a missed
+// one is a silent false negative. Normalising once keeps the rules readable.
+DeviceProcessEvents
+| project
+    TimeGenerated,
+    DeviceName,
+    AccountName = tolower(AccountName),
+    AccountDomain,
+    FileName = tolower(FileName),
+    ProcessCommandLine,
+    InitiatingProcessFileName = tolower(InitiatingProcessFileName),
+    InitiatingProcessCommandLine,
+    SHA256

@@ -1,0 +1,5 @@
+schemaVersion: 1
+id: DET-MDE-0001
+# No approved exceptions yet. Each entry needs an owner, approver and expiry so
+# exclusions never become permanent by accident.
+exceptions: []

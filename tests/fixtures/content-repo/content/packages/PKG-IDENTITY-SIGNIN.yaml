@@ -1,0 +1,9 @@
+schemaVersion: 1
+id: PKG-IDENTITY-SIGNIN
+displayName: Identity sign-in detections
+description: Sign-in abuse detections and the watchlist they depend on.
+contents:
+  detections:
+    - DET-ENTRA-0001
+  watchlists:
+    - WL-PRIVILEGED-ACCOUNTS

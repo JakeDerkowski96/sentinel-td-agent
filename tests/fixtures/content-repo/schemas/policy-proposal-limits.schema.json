@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-detection-as-code/schemas/policy-proposal-limits.schema.json",
+  "title": "Proposal limits policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "branch_prefix",
+    "required_labels",
+    "limits",
+    "allowed_paths",
+    "forbidden_paths",
+    "require_human_label_for"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "branch_prefix": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_labels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limits": {
+      "type": "object",
+      "required": [
+        "max_rules_changed_per_pr",
+        "max_files_changed_per_pr"
+      ],
+      "properties": {
+        "max_rules_changed_per_pr": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_files_changed_per_pr": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "allowed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "forbidden_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "require_human_label_for": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

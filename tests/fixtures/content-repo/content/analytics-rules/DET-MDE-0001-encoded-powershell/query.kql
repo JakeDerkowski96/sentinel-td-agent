@@ -1,0 +1,18 @@
+// DET-MDE-0001
+// Depends on FUNC-NORMALIZE-PROCESS-001 (ProcessEventsNormalized).
+// MinEncodedLength is a `let` so tenants with chatty admin tooling can raise
+// it through an override instead of forking the rule.
+let MinEncodedLength = 20;
+ProcessEventsNormalized()
+| where FileName in ("powershell.exe", "pwsh.exe")
+| where ProcessCommandLine matches regex strcat(@"(?i)\s-(e|ec|enc|encodedcommand)\s+[A-Za-z0-9+/=]{", tostring(MinEncodedLength), ",}")
+| project
+    TimeGenerated,
+    DeviceName,
+    AccountName,
+    AccountDomain,
+    FileName,
+    ProcessCommandLine,
+    InitiatingProcessFileName,
+    InitiatingProcessCommandLine,
+    SHA256

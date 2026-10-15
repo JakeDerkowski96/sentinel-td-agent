@@ -1,0 +1,493 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-detection-as-code/schemas/content-manifest.schema.json",
+  "title": "Content manifest (manifest.yaml) for non-rule content",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "type",
+    "displayName",
+    "description",
+    "owner",
+    "lifecycle",
+    "deployment"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "enum": [
+        "function",
+        "parser",
+        "watchlist",
+        "automation-rule",
+        "playbook",
+        "workbook",
+        "hunting-query"
+      ]
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lifecycle": {
+      "enum": [
+        "draft",
+        "validated",
+        "sandbox-passed",
+        "canary",
+        "approved",
+        "production",
+        "retired"
+      ]
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "functions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^FUNC-[A-Z0-9]+(-[A-Z0-9]+)*-\\d{3}$"
+          },
+          "uniqueItems": true
+        },
+        "parsers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^PARSER-[A-Z0-9]+(-[A-Z0-9]+)*-\\d{3}$"
+          },
+          "uniqueItems": true
+        },
+        "watchlists": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^WL-[A-Z0-9]+(-[A-Z0-9]+)*$"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope"
+      ],
+      "properties": {
+        "scope": {
+          "enum": [
+            "global",
+            "selected",
+            "excluded",
+            "capability",
+            "tenant-specific"
+          ]
+        },
+        "tenants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "requirements": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tables": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "solutions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "connectors": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "productionCanary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "severity": {
+              "enum": [
+                "Informational",
+                "Low",
+                "Medium",
+                "High"
+              ]
+            },
+            "duration": {
+              "type": "string",
+              "pattern": "^P(?=\\d|T\\d)(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "enum": [
+                  "selected",
+                  "excluded",
+                  "tenant-specific"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "tenants"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "capability"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "requirements"
+            ]
+          }
+        }
+      ]
+    },
+    "alias": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": {}
+        }
+      }
+    },
+    "queryFile": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+\\.kql$"
+    },
+    "tables": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "itemsSearchKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataFile": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+\\.csv$"
+    },
+    "dataClassification": {
+      "enum": [
+        "synthetic",
+        "reference",
+        "managed-externally"
+      ]
+    },
+    "definitionFile": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+\\.json$"
+    },
+    "tactics": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "Reconnaissance",
+          "ResourceDevelopment",
+          "InitialAccess",
+          "Execution",
+          "Persistence",
+          "PrivilegeEscalation",
+          "DefenseEvasion",
+          "CredentialAccess",
+          "Discovery",
+          "LateralMovement",
+          "Collection",
+          "CommandAndControl",
+          "Exfiltration",
+          "Impact",
+          "ImpairProcessControl",
+          "InhibitResponseFunction",
+          "PreAttack"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "techniques": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^T\\d{4}(\\.\\d{3})?$"
+      },
+      "uniqueItems": true
+    },
+    "ruleConversion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate"
+      ],
+      "properties": {
+        "candidate": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "function"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "pattern": "^FUNC-[A-Z0-9]+(-[A-Z0-9]+)*-\\d{3}$"
+          },
+          "alias": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          }
+        },
+        "required": [
+          "alias",
+          "queryFile",
+          "tables"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "parser"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "pattern": "^PARSER-[A-Z0-9]+(-[A-Z0-9]+)*-\\d{3}$"
+          },
+          "alias": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          }
+        },
+        "required": [
+          "alias",
+          "queryFile",
+          "tables"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "watchlist"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "pattern": "^WL-[A-Z0-9]+(-[A-Z0-9]+)*$"
+          },
+          "alias": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          }
+        },
+        "required": [
+          "alias",
+          "itemsSearchKey",
+          "dataFile",
+          "dataClassification"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "automation-rule"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "pattern": "^AUTO-[A-Z0-9]+(-[A-Z0-9]+)*-\\d{3}$"
+          }
+        },
+        "required": [
+          "definitionFile"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "playbook"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "pattern": "^PB-[A-Z0-9]+(-[A-Z0-9]+)*-\\d{3}$"
+          }
+        },
+        "required": [
+          "definitionFile"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "workbook"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "pattern": "^WB-[A-Z0-9]+(-[A-Z0-9]+)*-\\d{3}$"
+          }
+        },
+        "required": [
+          "definitionFile"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "hunting-query"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "id": {
+            "pattern": "^HUNT-[A-Z0-9]+-\\d{4}$"
+          }
+        },
+        "required": [
+          "queryFile",
+          "tables",
+          "tactics",
+          "techniques",
+          "ruleConversion"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+schemaVersion: 1
+id: DET-ENTRA-0001
+kind: Scheduled
+displayName: Many failed sign-ins followed by a successful sign-in
+description: >-
+  A user account accumulated many failed password sign-ins and then signed in
+  successfully within the same window, which suggests password guessing or
+  spraying that eventually worked.
+severity: Medium
+enabled: true
+queryFile: query.kql
+queryFrequency: PT1H
+queryPeriod: PT1H
+triggerOperator: GreaterThan
+triggerThreshold: 0
+suppression:
+  enabled: false
+  duration: PT5H
+tactics:
+  - CredentialAccess
+techniques:
+  - T1110
+eventGroupingSettings:
+  aggregationKind: SingleAlert
+incidentConfiguration:
+  createIncident: true
+  groupingConfiguration:
+    enabled: true
+    reopenClosedIncident: false
+    lookbackDuration: PT5H
+    matchingMethod: Selected
+    groupByEntities:
+      - Account
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: FullName
+        columnName: UserPrincipalName
+  - entityType: IP
+    fieldMappings:
+      - identifier: Address
+        columnName: IPAddress
+customDetails:
+  FailureCount: FailureCount
+  IsPrivileged: IsPrivileged
+alertDetailsOverride:
+  alertDisplayNameFormat: "Failed sign-ins then success for {{UserPrincipalName}}"
+  alertDescriptionFormat: "{{FailureCount}} failures then a success from {{IPAddress}} (privileged: {{IsPrivileged}})"

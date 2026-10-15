@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-detection-as-code/schemas/test-cases.schema.json",
+  "title": "Detection test cases (tests/test-cases.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "cases"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^DET-[A-Z0-9]+-\\d{4}$"
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "type",
+          "expect"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^TC-\\d{3}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "synthetic",
+              "replay",
+              "atomic",
+              "sandbox"
+            ]
+          },
+          "fixture": {
+            "type": "string",
+            "pattern": "^fixtures/[A-Za-z0-9_.-]+$"
+          },
+          "atomic": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "technique"
+            ],
+            "properties": {
+              "technique": {
+                "type": "string",
+                "pattern": "^T\\d{4}(\\.\\d{3})?$"
+              },
+              "testSelection": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "expect": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "fires"
+            ],
+            "properties": {
+              "fires": {
+                "type": "boolean"
+              },
+              "entities": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "Account",
+                    "Host",
+                    "IP",
+                    "Malware",
+                    "File",
+                    "Process",
+                    "CloudApplication",
+                    "DNS",
+                    "AzureResource",
+                    "FileHash",
+                    "RegistryKey",
+                    "RegistryValue",
+                    "SecurityGroup",
+                    "URL",
+                    "Mailbox",
+                    "MailCluster",
+                    "MailMessage",
+                    "SubmissionMail"
+                  ]
+                }
+              },
+              "customDetails": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "incident": {
+                "type": "boolean"
+              }
+            }
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "minItems": 1
+    }
+  }
+}

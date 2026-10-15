@@ -1,0 +1,41 @@
+schemaVersion: 1
+id: DET-LINUX-0001
+kind: Scheduled
+displayName: SSH brute force from a single source
+description: >-
+  A single source address produced many failed SSH password attempts against
+  one host within the query window.
+severity: Low
+enabled: true
+queryFile: query.kql
+queryFrequency: PT15M
+queryPeriod: PT15M
+triggerOperator: GreaterThan
+triggerThreshold: 0
+tactics:
+  - CredentialAccess
+techniques:
+  - T1110.001
+eventGroupingSettings:
+  aggregationKind: AlertPerResult
+incidentConfiguration:
+  createIncident: true
+  groupingConfiguration:
+    enabled: true
+    reopenClosedIncident: false
+    lookbackDuration: PT1H
+    matchingMethod: Selected
+    groupByEntities:
+      - IP
+entityMappings:
+  - entityType: IP
+    fieldMappings:
+      - identifier: Address
+        columnName: SourceIP
+  - entityType: Host
+    fieldMappings:
+      - identifier: HostName
+        columnName: Computer
+customDetails:
+  Attempts: Attempts
+  DistinctUsers: DistinctUsers

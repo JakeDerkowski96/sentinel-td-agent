@@ -1,0 +1,42 @@
+# Tuning signal thresholds and learning-eligibility rules.
+# Starting defaults only -- calibrate against real alert volumes.
+schemaVersion: 1
+
+# A rule becomes a tuning candidate when ANY signal below fires.
+signals:
+  excessive_volume:
+    description: Rule generates more alerts than analysts can reasonably review.
+    window: P7D
+    min_alerts: 100
+  false_positive_pattern:
+    description: Repeated validated benign closures sharing a trigger condition.
+    window: P30D
+    min_validated_benign_findings: 5
+  silent_rule:
+    description: Rule produced no alerts although its source tables are receiving data.
+    window: P90D
+    max_alerts: 0
+    require_source_table_ingestion: true
+  broken_rule:
+    description: Rule execution failures reported by SentinelHealth.
+    window: P1D
+    min_failures: 3
+  performance_degradation:
+    description: Query execution time or cost has regressed.
+    window: P7D
+    p95_duration_increase_pct: 50
+  analyst_request:
+    description: A ticket explicitly asks for the rule to be tuned.
+
+# A triage finding may be used as tuning evidence only when ALL of these hold.
+# Mirrors the learning_eligibility gate on the TriageFinding contract.
+learning_eligibility:
+  require_analyst_validated: true
+  min_evidence_completeness: 0.7
+  min_assessment_confidence: 0.6
+
+# Replay validation a tuning proposal must pass before a PR is opened.
+replay_requirements:
+  windows: [P7D, P30D]
+  max_coverage_regression_pct: 0        # a tune must not lose known true positives
+  require_known_true_positives_retained: true

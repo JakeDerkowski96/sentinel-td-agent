@@ -1,0 +1,12 @@
+TimeGenerated,UserPrincipalName,IPAddress,ResultType,AppDisplayName
+2026-10-15T09:00:00Z,jordan@contoso.example,203.0.113.10,50126,Office 365
+2026-10-15T09:01:00Z,jordan@contoso.example,203.0.113.11,50126,Office 365
+2026-10-15T09:02:00Z,jordan@contoso.example,203.0.113.12,50126,Office 365
+2026-10-15T09:03:00Z,jordan@contoso.example,203.0.113.10,50126,Office 365
+2026-10-15T09:04:00Z,jordan@contoso.example,203.0.113.11,50126,Office 365
+2026-10-15T09:05:00Z,jordan@contoso.example,203.0.113.12,50126,Office 365
+2026-10-15T09:06:00Z,jordan@contoso.example,203.0.113.10,50126,Office 365
+2026-10-15T09:07:00Z,jordan@contoso.example,203.0.113.11,50126,Office 365
+2026-10-15T09:08:00Z,jordan@contoso.example,203.0.113.12,50126,Office 365
+2026-10-15T09:09:00Z,jordan@contoso.example,203.0.113.10,50126,Office 365
+2026-10-15T09:30:00Z,jordan@contoso.example,203.0.113.10,0,Office 365

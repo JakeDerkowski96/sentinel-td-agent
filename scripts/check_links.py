@@ -25,7 +25,8 @@ import sys
 from pathlib import Path
 
 LINK = re.compile(r"(?<!\!)\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
-SKIP_DIRS = {".git", ".venv", "node_modules", "build"}
+# Vendored fixtures are snapshots of another repo; their relative links are not ours to check.
+SKIP_DIRS = {".git", ".venv", "node_modules", "build", "fixtures"}
 log = logging.getLogger("check_links")
 
 
@@ -52,7 +53,9 @@ def broken_links(path: Path, root: Path) -> list[str]:
                 continue
             resolved = (path.parent / file_part).resolve()
             if not resolved.exists():
-                problems.append(f"{path.relative_to(root).as_posix()}:{number}: broken link '{target}'")
+                problems.append(
+                    f"{path.relative_to(root).as_posix()}:{number}: broken link '{target}'"
+                )
     return problems
 
 

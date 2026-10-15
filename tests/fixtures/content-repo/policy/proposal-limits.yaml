@@ -1,0 +1,41 @@
+# Boundaries for AI-authored pull requests. Enforced by CI and by the
+# agent's own pre-flight checks; the GitHub App permissions are the backstop.
+schemaVersion: 1
+
+branch_prefix: agent/
+required_labels: [ai-proposed]
+
+limits:
+  max_rules_changed_per_pr: 3
+  max_files_changed_per_pr: 20
+
+# Paths the agent may modify (glob, repo-relative).
+allowed_paths:
+  - content/analytics-rules/**
+  - content/functions/**
+  - content/parsers/**
+  - content/watchlists/**
+  - content/hunting-queries/**
+  - content/packages/**
+  - tenants/overrides/**
+
+# Paths the agent must never modify, even if matched by allowed_paths.
+forbidden_paths:
+  - .github/**
+  - policy/**
+  - schemas/**
+  - src/**
+  - tests/**
+  - content/automation-rules/**   # response actions: human-authored only
+  - content/playbooks/**          # response actions: human-authored only
+
+# Changes that need an explicit human label before merge, in addition to review.
+require_human_label_for:
+  severity_decrease: needs-human-severity
+  rule_disable: needs-human-disable
+  new_exception: needs-human-exception
+  scope_widened_to_global: needs-human-scope
+  lifecycle_to_production: needs-human-promotion
+
+# Per-rule override: metadata.yaml `agent.tuning` can be allowed | propose-only | locked.
+# `locked` rules are never modified by the agent regardless of the above.
