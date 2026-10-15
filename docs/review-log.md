@@ -386,7 +386,7 @@ could have done instead, and what I chose. Written for your review.
 1. Ignore.
 2. Work around it.
 
-**Choice and why.** Added `.gitattributes` (`eol=lf`) to both repos and made the test fixture copy files only. No behaviour impact.
+**Choice and why.** Added `.gitattributes` (`eol=lf`) to both repos and made the test fixture copy files only. No behaviour impact. Also found while verifying a fresh clone: the vendored fixture has paths over 140 characters, so cloning into a deeply nested Windows folder fails with 'Filename too long' unless long paths are enabled (`git config core.longpaths true`) or the clone path is short. Cloning into a short path worked.
 
 **Follow-up for you.** Consider keeping git repos out of OneDrive, which can also corrupt `.git` directories.
 
