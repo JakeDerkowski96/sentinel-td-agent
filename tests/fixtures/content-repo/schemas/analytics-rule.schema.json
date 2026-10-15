@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-detection-as-code/schemas/analytics-rule.schema.json",
+  "title": "Analytics rule definition (rule.yaml)",
+  "description": "Deployable Sentinel scheduled-rule properties. Non-deployable context lives in metadata.yaml.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "kind",
+    "displayName",
+    "description",
+    "severity",
+    "enabled",
+    "queryFile",
+    "queryFrequency",
+    "queryPeriod",
+    "triggerOperator",
+    "triggerThreshold",
+    "tactics",
+    "techniques",
+    "entityMappings"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^DET-[A-Z0-9]+-\\d{4}$"
+    },
+    "kind": {
+      "enum": [
+        "Scheduled"
+      ]
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 256
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20
+    },
+    "severity": {
+      "enum": [
+        "Informational",
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "queryFile": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+\\.kql$"
+    },
+    "queryFrequency": {
+      "type": "string",
+      "pattern": "^P(?=\\d|T\\d)(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+    },
+    "queryPeriod": {
+      "type": "string",
+      "pattern": "^P(?=\\d|T\\d)(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+    },
+    "triggerOperator": {
+      "enum": [
+        "GreaterThan",
+        "LessThan",
+        "Equal",
+        "NotEqual"
+      ]
+    },
+    "triggerThreshold": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "suppression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "duration": {
+          "type": "string",
+          "pattern": "^P(?=\\d|T\\d)(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+        }
+      }
+    },
+    "tactics": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "Reconnaissance",
+          "ResourceDevelopment",
+          "InitialAccess",
+          "Execution",
+          "Persistence",
+          "PrivilegeEscalation",
+          "DefenseEvasion",
+          "CredentialAccess",
+          "Discovery",
+          "LateralMovement",
+          "Collection",
+          "CommandAndControl",
+          "Exfiltration",
+          "Impact",
+          "ImpairProcessControl",
+          "InhibitResponseFunction",
+          "PreAttack"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "techniques": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^T\\d{4}(\\.\\d{3})?$"
+      },
+      "uniqueItems": true
+    },
+    "eventGroupingSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "aggregationKind"
+      ],
+      "properties": {
+        "aggregationKind": {
+          "enum": [
+            "SingleAlert",
+            "AlertPerResult"
+          ]
+        }
+      }
+    },
+    "incidentConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "createIncident"
+      ],
+      "properties": {
+        "createIncident": {
+          "type": "boolean"
+        },
+        "groupingConfiguration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "reopenClosedIncident": {
+              "type": "boolean"
+            },
+            "lookbackDuration": {
+              "type": "string",
+              "pattern": "^P(?=\\d|T\\d)(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+            },
+            "matchingMethod": {
+              "enum": [
+                "AllEntities",
+                "AnyAlert",
+                "Selected"
+              ]
+            },
+            "groupByEntities": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "Account",
+                  "Host",
+                  "IP",
+                  "Malware",
+                  "File",
+                  "Process",
+                  "CloudApplication",
+                  "DNS",
+                  "AzureResource",
+                  "FileHash",
+                  "RegistryKey",
+                  "RegistryValue",
+                  "SecurityGroup",
+                  "URL",
+                  "Mailbox",
+                  "MailCluster",
+                  "MailMessage",
+                  "SubmissionMail"
+                ]
+              }
+            },
+            "groupByAlertDetails": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "groupByCustomDetails": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "entityMappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entityType",
+          "fieldMappings"
+        ],
+        "properties": {
+          "entityType": {
+            "enum": [
+              "Account",
+              "Host",
+              "IP",
+              "Malware",
+              "File",
+              "Process",
+              "CloudApplication",
+              "DNS",
+              "AzureResource",
+              "FileHash",
+              "RegistryKey",
+              "RegistryValue",
+              "SecurityGroup",
+              "URL",
+              "Mailbox",
+              "MailCluster",
+              "MailMessage",
+              "SubmissionMail"
+            ]
+          },
+          "fieldMappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "identifier",
+                "columnName"
+              ],
+              "properties": {
+                "identifier": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "columnName": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 10
+    },
+    "customDetails": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      },
+      "maxProperties": 20
+    },
+    "alertDetailsOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alertDisplayNameFormat": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alertDescriptionFormat": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alertTacticsColumnName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alertSeverityColumnName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alertDynamicProperties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "alertProperty",
+              "value"
+            ],
+            "properties": {
+              "alertProperty": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

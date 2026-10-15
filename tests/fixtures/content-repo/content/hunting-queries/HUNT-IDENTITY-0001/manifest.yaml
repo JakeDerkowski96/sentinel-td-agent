@@ -1,0 +1,20 @@
+schemaVersion: 1
+id: HUNT-IDENTITY-0001
+type: hunting-query
+displayName: Successful sign-ins from many countries in one day
+description: Finds accounts that signed in successfully from three or more countries within a day.
+owner: detection-engineering
+lifecycle: draft
+queryFile: hunt.kql
+tables:
+  - SigninLogs
+tactics:
+  - InitialAccess
+techniques:
+  - T1078
+# Hunting queries that meet conversion criteria are one of the agent's CREATE triggers.
+ruleConversion:
+  candidate: true
+  notes: Needs a VPN/travel exclusion strategy before it can be a low-noise rule.
+deployment:
+  scope: global

@@ -1,0 +1,36 @@
+schemaVersion: 1
+id: DET-ENTRA-0001
+lifecycle: validated
+owner: detection-engineering
+confidenceTier: Experimental
+created: "2026-10-15"
+package: PKG-IDENTITY-SIGNIN
+dataSources:
+  tables:
+    - SigninLogs
+  connectors:
+    - Microsoft Entra ID
+dependencies:
+  watchlists:
+    - WL-PRIVILEGED-ACCOUNTS
+deployment:
+  scope: global
+  productionCanary:
+    enabled: true
+    severity: Informational
+    duration: P7D
+quality:
+  expectedAlertVolume: low
+  knownLimitations:
+    - Counts failures per user, so a distributed spray that stays under the threshold per user is not detected.
+  falsePositiveSources:
+    - Users who mistype a password repeatedly, then succeed.
+    - Misconfigured clients retrying with a stale password.
+  blindSpots:
+    - Federated sign-ins that fail at the identity provider and never reach Entra ID.
+agent:
+  tuning: allowed
+  origin: human
+documentation:
+  summary: Detects likely successful password guessing against a user account.
+  analystPlaybook: analyst-playbook.md

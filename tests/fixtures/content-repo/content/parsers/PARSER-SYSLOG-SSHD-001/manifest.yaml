@@ -1,0 +1,18 @@
+schemaVersion: 1
+id: PARSER-SYSLOG-SSHD-001
+type: parser
+displayName: Syslog sshd authentication parser
+description: Extracts outcome, target user and source IP from sshd authentication messages in the Syslog table.
+owner: detection-engineering
+lifecycle: validated
+alias: SyslogSshdAuth
+category: Parser
+parameters: []
+queryFile: parser.kql
+tables:
+  - Syslog
+deployment:
+  scope: capability
+  requirements:
+    tables:
+      - Syslog

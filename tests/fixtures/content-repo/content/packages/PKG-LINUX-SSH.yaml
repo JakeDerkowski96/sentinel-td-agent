@@ -1,0 +1,9 @@
+schemaVersion: 1
+id: PKG-LINUX-SSH
+displayName: Linux SSH detections
+description: SSH authentication abuse detections and the sshd parser.
+contents:
+  detections:
+    - DET-LINUX-0001
+  parsers:
+    - PARSER-SYSLOG-SSHD-001

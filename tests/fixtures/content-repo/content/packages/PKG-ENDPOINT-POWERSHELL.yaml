@@ -1,0 +1,9 @@
+schemaVersion: 1
+id: PKG-ENDPOINT-POWERSHELL
+displayName: Endpoint PowerShell detections
+description: PowerShell abuse detections and the shared process-normalisation function.
+contents:
+  detections:
+    - DET-MDE-0001
+  functions:
+    - FUNC-NORMALIZE-PROCESS-001

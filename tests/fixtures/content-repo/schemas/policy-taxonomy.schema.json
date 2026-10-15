@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-detection-as-code/schemas/policy-taxonomy.schema.json",
+  "title": "Taxonomy policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id_prefixes",
+    "domains",
+    "confidence_tiers"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id_prefixes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "confidence_tiers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

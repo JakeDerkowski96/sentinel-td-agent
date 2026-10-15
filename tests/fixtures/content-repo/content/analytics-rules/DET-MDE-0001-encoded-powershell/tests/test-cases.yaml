@@ -1,0 +1,21 @@
+schemaVersion: 1
+id: DET-MDE-0001
+cases:
+  - id: TC-001
+    name: Attack simulation for encoded PowerShell
+    type: atomic
+    atomic:
+      technique: T1059.001
+      # Specific Atomic Red Team test to be selected and verified before this
+      # rule can leave `draft`.
+      testSelection: pending
+    expect:
+      fires: true
+      entities: [Account, Host, Process]
+      incident: true
+  - id: TC-002
+    name: Plain PowerShell invocation does not fire
+    type: synthetic
+    fixture: fixtures/plain-powershell.csv
+    expect:
+      fires: false

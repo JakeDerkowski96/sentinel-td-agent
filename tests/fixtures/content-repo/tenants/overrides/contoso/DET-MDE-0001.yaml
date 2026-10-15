@@ -1,0 +1,10 @@
+schemaVersion: 1
+tenant: contoso
+rule: DET-MDE-0001
+overrides:
+  # Replaces the default of the `MinEncodedLength` let-statement in query.kql.
+  queryParameters:
+    MinEncodedLength: 40
+reason: Tenant's endpoint management agent passes short encoded commands that are routinely benign.
+approvedBy: detection-engineering
+expires: "2027-04-15"

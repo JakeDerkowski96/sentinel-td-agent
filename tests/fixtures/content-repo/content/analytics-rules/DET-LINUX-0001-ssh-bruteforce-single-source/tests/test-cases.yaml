@@ -1,0 +1,11 @@
+schemaVersion: 1
+id: DET-LINUX-0001
+cases:
+  - id: TC-001
+    name: Twenty failed attempts from one source fires
+    type: synthetic
+    fixture: fixtures/ssh-failures.csv
+    expect:
+      fires: true
+      entities: [IP, Host]
+      customDetails: [Attempts, DistinctUsers]

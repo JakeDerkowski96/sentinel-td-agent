@@ -1,0 +1,21 @@
+// DET-ENTRA-0001
+// Threshold is a `let` so a tenant override can change it without forking the rule.
+let FailureThreshold = 10;
+let Failures = SigninLogs
+    | where ResultType in ("50126", "50053")    // bad password, account locked
+    | summarize
+        FailureCount = count(),
+        FirstFailure = min(TimeGenerated),
+        LastFailure = max(TimeGenerated),
+        FailedIPs = make_set(IPAddress, 20)
+        by UserPrincipalName
+    | where FailureCount >= FailureThreshold;
+let PrivilegedAccounts = _GetWatchlist('privileged-accounts')
+    | project UserPrincipalName = tolower(SearchKey);
+SigninLogs
+| where ResultType == "0"
+| join kind=inner Failures on UserPrincipalName
+| where TimeGenerated > LastFailure
+| extend IsPrivileged = tolower(UserPrincipalName) in (PrivilegedAccounts)
+| summarize arg_max(TimeGenerated, IPAddress, AppDisplayName, FailureCount, FirstFailure, LastFailure, FailedIPs, IsPrivileged)
+    by UserPrincipalName

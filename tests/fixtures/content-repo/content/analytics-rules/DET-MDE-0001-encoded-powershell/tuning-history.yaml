@@ -1,0 +1,10 @@
+schemaVersion: 1
+id: DET-MDE-0001
+entries:
+  - version: 1.0.0
+    date: "2026-10-15"
+    type: create
+    summary: Initial rule.
+    reason: Example rule shipped with the scaffold; demonstrates a function dependency and a tenant override.
+    origin: human
+    outcome: merged

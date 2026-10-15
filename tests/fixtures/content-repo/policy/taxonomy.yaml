@@ -1,0 +1,19 @@
+# Identifier and classification vocabulary. IDs are permanent: a rename
+# never creates a new logical detection.
+schemaVersion: 1
+
+id_prefixes:
+  analytics-rule:  DET
+  function:        FUNC
+  parser:          PARSER
+  watchlist:       WL
+  automation-rule: AUTO
+  playbook:        PB
+  workbook:        WB
+  hunting-query:   HUNT
+  package:         PKG
+
+# Used as the middle segment of DET-<DOMAIN>-<nnnn>.
+domains: [ENTRA, AZURE, MDE, MDO, MDI, MDA, AWS, GCP, LINUX, WINDOWS, NETWORK, SAAS, CUSTOM]
+
+confidence_tiers: [Experimental, Tuned, Stable]

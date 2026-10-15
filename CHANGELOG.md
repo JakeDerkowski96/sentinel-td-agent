@@ -17,7 +17,8 @@ the project follows [Semantic Versioning](https://semver.org/).
 - `tdagent` CLI: implemented `content list|show|validate|index`, `report audit`,
   `report coverage` and `doctor`; the rest of the command tree is stubbed with a documented
   exit code and the phase that delivers it.
-- Vendored sample content repository for tests.
+- Vendored sample content repository for tests, with `scripts/refresh_fixture.py` to update it.
+- `scripts/check_links.py` documentation link checker.
 - CI workflow with a single gate job; repository settings script.
 
 [Unreleased]: https://github.com/JakeDerkowski96/sentinel-td-agent/commits/main

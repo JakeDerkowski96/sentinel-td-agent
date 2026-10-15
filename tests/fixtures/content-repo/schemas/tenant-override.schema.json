@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JakeDerkowski96/sentinel-detection-as-code/schemas/tenant-override.schema.json",
+  "title": "Tenant override (tenants/overrides/<tenant>/<rule>.yaml)",
+  "description": "Tenant-local difference expressed as an override, never as a copy of the rule.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "tenant",
+    "rule",
+    "overrides",
+    "reason",
+    "approvedBy"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "tenant": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "rule": {
+      "type": "string",
+      "pattern": "^DET-[A-Z0-9]+-\\d{4}$"
+    },
+    "overrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "severity": {
+          "enum": [
+            "Informational",
+            "Low",
+            "Medium",
+            "High"
+          ]
+        },
+        "queryFrequency": {
+          "type": "string",
+          "pattern": "^P(?=\\d|T\\d)(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+        },
+        "queryPeriod": {
+          "type": "string",
+          "pattern": "^P(?=\\d|T\\d)(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$"
+        },
+        "triggerThreshold": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "queryParameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        }
+      }
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approvedBy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expires": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    }
+  }
+}

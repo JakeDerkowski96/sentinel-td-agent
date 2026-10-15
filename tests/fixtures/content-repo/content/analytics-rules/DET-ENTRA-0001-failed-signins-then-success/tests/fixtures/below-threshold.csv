@@ -1,0 +1,5 @@
+TimeGenerated,UserPrincipalName,IPAddress,ResultType,AppDisplayName
+2026-10-15T09:00:00Z,casey@contoso.example,198.51.100.5,50126,Office 365
+2026-10-15T09:01:00Z,casey@contoso.example,198.51.100.5,50126,Office 365
+2026-10-15T09:02:00Z,casey@contoso.example,198.51.100.5,50126,Office 365
+2026-10-15T09:10:00Z,casey@contoso.example,198.51.100.5,0,Office 365

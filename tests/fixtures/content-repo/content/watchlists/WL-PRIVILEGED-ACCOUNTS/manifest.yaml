@@ -1,0 +1,15 @@
+schemaVersion: 1
+id: WL-PRIVILEGED-ACCOUNTS
+type: watchlist
+displayName: Privileged accounts
+description: Accounts with administrative roles; used to raise the priority of identity detections.
+owner: detection-engineering
+lifecycle: validated
+alias: privileged-accounts
+itemsSearchKey: UserPrincipalName
+dataFile: data.csv
+# synthetic = the committed CSV is sample data only. A real deployment would use
+# `managed-externally` and populate the watchlist from an authoritative source.
+dataClassification: synthetic
+deployment:
+  scope: global
